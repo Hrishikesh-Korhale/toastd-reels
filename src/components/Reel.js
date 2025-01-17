@@ -79,7 +79,7 @@ const styles = {
   },
   muteButton: {
     position: "absolute",
-    bottom: "20px",
+    top: "20px",
     right: "20px",
     backgroundColor: "rgba(0, 0, 0, 0.5)",
     borderRadius: "50%",
