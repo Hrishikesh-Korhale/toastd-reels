@@ -19,6 +19,7 @@ const styles = {
 
 const ReelList = ({ reels }) => {
   const [activeIndex, setActiveIndex] = useState(0); // Track the index of the active reel
+  const [isMuted, setIsMuted] = useState(true);
 
   // Handle when the reel enters or leaves the viewport
   const handleInView = (index, inView) => {
@@ -32,7 +33,7 @@ const ReelList = ({ reels }) => {
       {reels.map((reel, index) => {
         const { ref, inView } = useInView({
           triggerOnce: false, // Continue checking visibility
-          threshold: 0.5,      // 50% visibility required for a reel to be considered in view
+          threshold: 0.5, // 50% visibility required for a reel to be considered in view
         });
 
         // Trigger play/pause when the reel comes into view
@@ -51,6 +52,8 @@ const ReelList = ({ reels }) => {
               placeholderText={reel.placeholderText}
               isActive={index === activeIndex} // Only the active reel plays
               resetVideo={index === activeIndex && inView} // Reset the video when it comes into view
+              isMuted={isMuted}
+              setIsMuted={setIsMuted}
             />
           </div>
         );

@@ -4,7 +4,7 @@ import ReelList from "../components/ReelList";
 export default function Home() {
   const reels = [
     {
-      videoSrc: "/reel2.mp4",
+      videoSrc: "/reel1.mp4",
       placeholderText: "This is Reel 1!",
     },
     {
@@ -12,11 +12,11 @@ export default function Home() {
       placeholderText: "This is Reel 2!",
     },
     {
-      videoSrc: "/reel2.mp4",
+      videoSrc: "/reel3.mp4",
       placeholderText: "This is Reel 3!",
     },
     {
-      videoSrc: "/reel2.mp4",
+      videoSrc: "/reel1.mp4",
       placeholderText: "This is Reel 4!",
     },
     {

@@ -103,13 +103,13 @@ const styles = {
   },
 };
 
-const Reel = ({ videoSrc, placeholderText, isActive, resetVideo }) => {
+const Reel = ({ videoSrc, placeholderText, isActive, resetVideo,isMuted,setIsMuted }) => {
   const videoRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState([]);
-  const [isMuted, setIsMuted] = useState(true);
+
   const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
