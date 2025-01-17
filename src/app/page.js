@@ -8,7 +8,7 @@ export default function Home() {
       placeholderText: "This is Reel 1!",
     },
     {
-      videoSrc: "/reel1.mp4",
+      videoSrc: "/reel2.mp4",
       placeholderText: "This is Reel 2!",
     },
     {

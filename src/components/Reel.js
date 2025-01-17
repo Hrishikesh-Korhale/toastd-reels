@@ -1,6 +1,6 @@
 "use client";
-import React, { useRef, useEffect, useState } from "react";
-import { IconButton, Typography, Snackbar, Alert } from "@mui/material";
+import React, { useRef, useState, useEffect } from "react";
+import { IconButton, Typography } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import CommentIcon from "@mui/icons-material/Comment";
@@ -65,23 +65,27 @@ const styles = {
   },
 };
 
-const Reel = ({ videoSrc, placeholderText, isActive }) => {
+const Reel = ({ videoSrc, placeholderText, isActive, resetVideo }) => {
   const videoRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState([]);
-  const [toastOpen, setToastOpen] = useState(false);
 
   useEffect(() => {
     if (isActive) {
-      videoRef.current?.play();
+      videoRef.current?.play(); // Play the video if it's active
       setIsPlaying(true);
+
+      if (resetVideo) {
+        // Reset the video to start from the beginning
+        videoRef.current.currentTime = 0;
+      }
     } else {
-      videoRef.current?.pause();
+      videoRef.current?.pause(); // Pause the video if it's not active
       setIsPlaying(false);
     }
-  }, [isActive]);
+  }, [isActive, resetVideo]);
 
   const toggleComments = () => {
     setShowComments(!showComments);
@@ -107,12 +111,8 @@ const Reel = ({ videoSrc, placeholderText, isActive }) => {
   const handleShare = () => {
     const dummyLink = "https://dummy.link/to/reel";
     navigator.clipboard.writeText(dummyLink).then(() => {
-      setToastOpen(true);
+      alert("Link copied to clipboard!");
     });
-  };
-
-  const handleToastClose = () => {
-    setToastOpen(false);
   };
 
   return (
@@ -122,7 +122,7 @@ const Reel = ({ videoSrc, placeholderText, isActive }) => {
         src={videoSrc}
         style={styles.video}
         loop
-        muted
+        // muted
         onClick={handlePlayPause}
       />
       <div style={styles.overlay}>
@@ -163,16 +163,6 @@ const Reel = ({ videoSrc, placeholderText, isActive }) => {
         onClose={() => setShowComments(false)}
         isVisible={showComments}
       />
-      <Snackbar
-        open={toastOpen}
-        autoHideDuration={3000}
-        onClose={handleToastClose}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      >
-        <Alert onClose={handleToastClose} severity="success" sx={{ width: "100%" }}>
-          Link copied to clipboard!
-        </Alert>
-      </Snackbar>
     </div>
   );
 };
