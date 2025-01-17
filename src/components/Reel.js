@@ -1,10 +1,14 @@
 "use client";
 import React, { useRef, useState, useEffect } from "react";
-import { IconButton, Typography } from "@mui/material";
+import { Button, IconButton, Typography } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import CommentIcon from "@mui/icons-material/Comment";
 import CommentBox from "./CommentBox";
+import VolumeUpIcon from "@mui/icons-material/VolumeUp";
+import VolumeOffIcon from "@mui/icons-material/VolumeOff";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import PauseIcon from "@mui/icons-material/Pause";
 
 const styles = {
   reel: {
@@ -63,6 +67,40 @@ const styles = {
     fontSize: "16px",
     fontWeight: "400",
   },
+  playPauseButton: {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    borderRadius: "50%",
+    padding: "15px",
+    zIndex: 3,
+  },
+  muteButton: {
+    position: "absolute",
+    bottom: "20px",
+    right: "20px",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    borderRadius: "50%",
+    padding: "10px",
+    zIndex: 3,
+  },
+  visitButton: {
+    position: "absolute",
+    bottom: "10px",
+    left: "50%",
+    transform: "translateX(-50%)",
+    padding: "10px 20px",
+    color: "white",
+    borderRadius: "5px",
+    cursor: "pointer",
+    zIndex: 3,
+    transition: "background-color 0.3s ease",
+  },
+  visitButtonHover: {
+    backgroundColor: "rgba(0, 0, 0, 0.8)",
+  },
 };
 
 const Reel = ({ videoSrc, placeholderText, isActive, resetVideo }) => {
@@ -71,6 +109,8 @@ const Reel = ({ videoSrc, placeholderText, isActive, resetVideo }) => {
   const [isLiked, setIsLiked] = useState(false);
   const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState([]);
+  const [isMuted, setIsMuted] = useState(true);
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     if (isActive) {
@@ -109,10 +149,15 @@ const Reel = ({ videoSrc, placeholderText, isActive, resetVideo }) => {
   };
 
   const handleShare = () => {
-    const dummyLink = "https://dummy.link/to/reel";
+    const dummyLink = "https://toastd-reels-sandy.vercel.app/";
     navigator.clipboard.writeText(dummyLink).then(() => {
       alert("Link copied to clipboard!");
     });
+  };
+
+  const handleMuteUnmute = () => {
+    setIsMuted(!isMuted);
+    videoRef.current.muted = !isMuted;
   };
 
   return (
@@ -122,15 +167,12 @@ const Reel = ({ videoSrc, placeholderText, isActive, resetVideo }) => {
         src={videoSrc}
         style={styles.video}
         loop
-        // muted
+        muted={isMuted}
         onClick={handlePlayPause}
       />
       <div style={styles.overlay}>
         <div style={styles.rightControls}>
-          <IconButton
-            style={styles.iconButton}
-            onClick={handleLike}
-          >
+          <IconButton style={styles.iconButton} onClick={handleLike}>
             <FavoriteIcon
               style={{
                 ...styles.icon,
@@ -138,25 +180,51 @@ const Reel = ({ videoSrc, placeholderText, isActive, resetVideo }) => {
               }}
             />
           </IconButton>
-          <IconButton
-            style={styles.iconButton}
-            onClick={toggleComments}
-          >
+          <IconButton style={styles.iconButton} onClick={toggleComments}>
             <CommentIcon style={styles.icon} />
           </IconButton>
-          <IconButton
-            style={styles.iconButton}
-            onClick={handleShare}
-          >
+          <IconButton style={styles.iconButton} onClick={handleShare}>
             <ShareIcon style={styles.icon} />
           </IconButton>
         </div>
-        <div style={styles.footer}>
-          <Typography variant="body1" style={styles.text}>
-            {placeholderText}
-          </Typography>
-        </div>
       </div>
+
+      {/* Play/Pause button centered */}
+      <div
+        style={isPlaying ? null : styles.playPauseButton}
+        onClick={handlePlayPause}
+      >
+        {!isPlaying && <PlayArrowIcon style={styles.icon} />}
+      </div>
+
+      {/* Mute/Unmute button at the bottom-right */}
+      <div style={styles.muteButton} onClick={handleMuteUnmute}>
+        {isMuted ? (
+          <VolumeOffIcon style={styles.icon} />
+        ) : (
+          <VolumeUpIcon style={styles.icon} />
+        )}
+      </div>
+
+      {/* Visit Product Page Button */}
+      <div
+        style={{
+          ...styles.visitButton,
+          ...(isHovered ? styles.visitButtonHover : {}),
+        }}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        <a
+          href="https://www.toastd.in/product/kapiva-himalayan-shilajit-resin-20g"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: "white", textDecoration: "none" }}
+        >
+          <Button variant="contained">Visit Product Page</Button>
+        </a>
+      </div>
+
       <CommentBox
         comments={comments}
         onAddComment={handleAddComment}
